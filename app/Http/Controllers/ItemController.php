@@ -31,7 +31,10 @@ class ItemController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('items', 'public');
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $filename);
+            $validated['image'] = 'images/' . $filename;
         }
 
         Item::create($validated);
@@ -61,10 +64,14 @@ class ItemController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($item->image) {
-                Storage::disk('public')->delete($item->image);
+            // Hapus gambar lama jika ada
+            if ($item->image && file_exists(public_path($item->image))) {
+                unlink(public_path($item->image));
             }
-            $validated['image'] = $request->file('image')->store('items', 'public');
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $filename);
+            $validated['image'] = 'images/' . $filename;
         }
 
         $item->update($validated);
@@ -73,8 +80,9 @@ class ItemController extends Controller
 
     public function destroy(Item $item)
     {
-        if ($item->image) {
-            Storage::disk('public')->delete($item->image);
+        // Hapus file gambar jika ada
+        if ($item->image && file_exists(public_path($item->image))) {
+            unlink(public_path($item->image));
         }
         $item->delete();
         return redirect()->route('items.index')->with('success', 'Item deleted.');

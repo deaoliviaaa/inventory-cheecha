@@ -14,6 +14,14 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                cheecha: {
+                    DEFAULT: '#c46a3b',   // oranye utama
+                    dark: '#a5522d',      // hover
+                    light: '#f5e1d3',     // header tabel / latar lembut
+                    bg: '#fef9f3',        // latar halaman
+                }
+            }
         },
     },
 
