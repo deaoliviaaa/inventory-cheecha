@@ -10,6 +10,11 @@ class Item extends Model
     use HasFactory;
 
     protected $fillable = [
-        'code', 'name', 'description', 'image', 'type', 'stock', 'price',
+        'code', 'name', 'description', 'type', 'stock', 'price', 'image'
     ];
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
 }
